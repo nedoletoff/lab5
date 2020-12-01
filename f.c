@@ -54,14 +54,10 @@ int main()
 			}
 			words[count] = (char*) malloc((len + 1) * sizeof(char));
 			for (int i = 0; i <= len; ++i)
-			{
-				words[count][i] = str[first];
-				++first;
-			}
-			words[count][++len] = '\0';
+				words[count][i] = str[first++];
+			words[count++][++len] = '\0';
 			if (maxlen < len)
 				maxlen = len;
-			++count;
 		}
 	}
 	
