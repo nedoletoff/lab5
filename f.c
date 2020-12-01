@@ -58,9 +58,9 @@ int main()
 				words[count][i] = str[first];
 				++first;
 			}
-			words[count][len++] = '\0';
+			words[count][++len] = '\0';
 			if (maxlen < len)
-				maxlen = len - 1;
+				maxlen = len;
 			++count;
 		}
 	}
