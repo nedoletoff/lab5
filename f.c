@@ -52,10 +52,10 @@ int main()
 				++len;
 				++j;
 			}
-			words[count] = (char*) malloc((len + 1) * sizeof(char));
-			for (int i = 0; i <= len; ++i)
+			words[count] = (char*) malloc(len * sizeof(char));
+			for (int i = 0; i < len; ++i)
 				words[count][i] = str[first++];
-			words[count++][++len] = '\0';
+			words[count++][len] = '\0';
 			if (maxlen < len)
 				maxlen = len;
 		}
