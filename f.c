@@ -2,6 +2,24 @@
 #include <stdlib.h>
 #define N 128
 
+int inputs(char** str)
+{
+        int numw = 0;
+	for (int i = 0; i < N - 1; ++i)		//считать строку и посчитать пробелы
+	{
+		str[i] = getchar();
+		if (str[i] == ' ')
+		       ++numw;
+		if (str[i] == '\n')
+		{
+			str[i] = '\0';
+			++numw;
+			break;
+		}
+	}
+        return numw;
+} 
+
 int main()
 {
 	char str[N] = {'\0'};
@@ -14,19 +32,7 @@ int main()
 	int* arr = NULL;
 	int maxlen = 0;
 
-	printf("Type string: ");
-	for (int i = 0; i < N - 1; ++i)		//считать строку и посчитать пробелы
-	{
-		str[i] = getchar();
-		if (str[i] == ' ')
-		       ++numw;
-		if (str[i] == '\n')
-		{
-			str[i] = ' ';
-			++numw;
-			break;
-		}
-	}
+	
 
 	printf("Type word: ");
 	for (int i = 0; i < N - 1; ++i)		//считать слово 
