@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #define N 128
 
-int inputs(char** str)
+int inputs(char* str)
 {
         int numw = 0;
-	for (int i = 0; i < N - 1; ++i)		//считать строку и посчитать пробелы
+	for (int i = 0; i < N - 1; ++i)	
 	{
 		str[i] = getchar();
 		if (str[i] == ' ')
@@ -20,34 +20,13 @@ int inputs(char** str)
         return numw;
 } 
 
-int main()
+int create_words(char* str, char** words, int* maxlen, int numw)
 {
-	char str[N] = {'\0'};
-	char word[N] = {'\0'};
-	int count = 0;
 	int first = 0;
-	int numw = 0;
-	char** words = NULL;
 	int len = 0;
-	int* arr = NULL;
-	int maxlen = 0;
+	int count = 0;
 
-	
-
-	printf("Type word: ");
-	for (int i = 0; i < N - 1; ++i)		//считать слово 
-	{
-		word[i] = getchar();
-		if (word[i] == '\n')
-		{
-			word[i] = '\0';
-			break;
-		}
-	}
-
-	words = (char**) malloc(numw * sizeof(char*));		//создать массив адресов
-
-	for (int j = 0; j < N; ++j)		//посчитать количество слов и создать слова
+	for (int j = 0; j < N; ++j)
 	{
 		if (str[j] != ' ' && str[j] != '\0')
 		{
@@ -62,24 +41,30 @@ int main()
 			for (int i = 0; i < len; ++i)
 				words[count][i] = str[first++];
 			words[count++][len] = '\0';
-			if (maxlen < len)
-				maxlen = len;
+			if (*maxlen < len)
+				*maxlen = len;
 		}
 	}
-	
-	arr = (int*) calloc(count, sizeof(int));	//создать массив длины слов
-	
-	for (int i = count; i < numw; ++i)	//очистить лишние адреса
+	for (int i = count; i < numw; ++i)
 		free(words[i]);
-		
-	for (int i = 0; i < count; ++i)		//посчитать длину слов
+	return count;
+}
+
+void count_lenw(int* arr, char** words, int count)
+{
+
+	for (int i = 0; i < count; ++i)	
 	{
-		len = 0;
+		int len = 0;
 		while (words[i][++len] != '\0');
 		arr[i] = len;
 	}
-	
-	for (int i = 0; i < count; ++i)		//вывести слова
+}
+
+void put_words(char** words, char* word, int* arr, int maxlen, int count)
+{
+
+	for (int i = 0; i < count; ++i)	
 	{
 		if (arr[i] != maxlen)
 			puts(words[i]);
@@ -87,7 +72,29 @@ int main()
 			puts(word);
 		free(words[i]);
 	}
+}
 
+int main()
+{
+	char str[N] = {'\0'};
+	char word[N] = {'\0'};
+	int count = 0;
+	int numw = 0;
+	char** words = NULL;
+	int* arr = NULL;
+	int maxlen = 0;
+
+	printf("Type string: ");	
+	numw = inputs(str);
+	printf("Type word: ");
+	inputs(word);
+
+	words = (char**) malloc(numw * sizeof(char*));
+	count = create_words(str, words, &maxlen, numw);
+	arr = (int*) calloc(count, sizeof(int));
+	count_lenw(arr, words, count);
+	put_words(words, word, arr, maxlen, count);
+		
 	free(words);
 	free(arr);
 
