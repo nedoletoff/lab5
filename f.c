@@ -28,11 +28,11 @@ int create_words(char* str, char** words, int* maxlen, int numw)
 
 	for (int j = 0; j < N; ++j)
 	{
-		if (str[j] != ' ' && str[j] != '\0')
+		if (str[j] != ' ' && str[j] != '\0' && str[j] != '\t')
 		{
 			len = 0;
 			first = j;
-			while (str[j] != ' ' && str[j] != '\0')
+			while (str[j] != ' ' && str[j] != '\0' && str[j] != '\t')
 			{
 				++len;
 				++j;
@@ -80,9 +80,9 @@ int main()
 	char word[N] = {'\0'};
 	int count = 0;
 	int numw = 0;
+	int maxlen = 0;
 	char** words = NULL;
 	int* arr = NULL;
-	int maxlen = 0;
 
 	printf("Type string: ");	
 	numw = inputs(str);
