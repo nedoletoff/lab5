@@ -50,21 +50,23 @@ int create_words(char* str, char** words, int* maxlen, int numw)
 	return count;
 }
 
-int count_lenw(char* word)
-{	
-	int len = 0;
-	while (word[++len] != '\0');
-	return len;
-		
-	
-}
-
-void put_words(char** words, char* word, int maxlen, int count)
+void count_lenw(int* arr, char** words, int count)
 {
 
 	for (int i = 0; i < count; ++i)	
 	{
-		if (count_lenw(words[i]) != maxlen)
+		int len = 0;
+		while (words[i][++len] != '\0');
+		arr[i] = len;
+	}
+}
+
+void put_words(char** words, char* word, int* arr, int maxlen, int count)
+{
+
+	for (int i = 0; i < count; ++i)	
+	{
+		if (arr[i] != maxlen)
 			puts(words[i]);
 		else 
 			puts(word);
@@ -80,6 +82,7 @@ int main()
 	int numw = 0;
 	int maxlen = 0;
 	char** words = NULL;
+	int* arr = NULL;
 
 	printf("Type string: ");	
 	numw = inputs(str);
@@ -88,9 +91,12 @@ int main()
 
 	words = (char**) malloc(numw * sizeof(char*));
 	count = create_words(str, words, &maxlen, numw);
-	put_words(words, word, maxlen, count);
+	arr = (int*) calloc(count, sizeof(int));
+	count_lenw(arr, words, count);
+	put_words(words, word, arr, maxlen, count);
 		
 	free(words);
+	free(arr);
 
 	return 0;
 }
