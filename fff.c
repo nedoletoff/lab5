@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define N 256
 
-int inputs(char* str)
+int inputs(char* str, int check)
 {
         int numw = 0;
 	for (int i = 0; i < N - 1; ++i)	
@@ -10,7 +10,7 @@ int inputs(char* str)
 		str[i] = getchar();
 		if (str[i] == ' ')
 		       ++numw;
-		if (str[i] == '\n')
+		if (str[i] == '\n' || str[i] == ' ' && check)
 		{
 			str[i] = '\0';
 			++numw;
@@ -20,31 +20,18 @@ int inputs(char* str)
         return numw;
 } 
 
-void inputn(int* number)
-{
-	printf("Type number: ");
-	while(scanf("%d", number) != 1 && getchar() != '\n')
-	{
-		printf("Try again\n");
-		while (getchar() != '\n');
-	}
-	while (getchar() != '\n');
-}
-
-
-
-int create_words(char* str, char** words, int* max_min, int check)
+int create_words(char* str, char** words, int* maxlen)
 {
 	int first = 0;
 	int len = 0;
 	int count = 0;
 
 	for (int j = 0; j < N; ++j)
-		if (str[j] != ' ' && str[j] != '\0' && str[j] != '\t')
+		if (str[j] != ' ' && str[j] != '\0')
 		{
 			len = 0;
 			first = j;
-			while (str[j] != ' ' && str[j] != '\0' && str[j] != '\t')
+			while (str[j] != ' ' && str[j] != '\0')
 			{
 				++len;
 				++j;
@@ -53,14 +40,8 @@ int create_words(char* str, char** words, int* max_min, int check)
 			for (int i = 0; i < len; ++i)
 				words[count][i] = str[first++];
 			words[count++][len] = '\0';
-			if (check)
-			{
-				if (*max_min < len)
-					*max_min = len;
-			}
-			else
-			       if (*max_min > len)
-					*max_min = len;
+			if (*maxlen < len)
+				*maxlen = len;
 		}
 	return count;
 }
@@ -68,10 +49,7 @@ int create_words(char* str, char** words, int* max_min, int check)
 void clear_words(char** words, int start, int stop)
 {
 	for (int i = start; i < stop; ++i)
-	{
-		free(words[i]);	
-		words[i] = NULL;
-	}
+		free(words[i]);
 }
 
 int count_lenw(char* word)
@@ -83,17 +61,16 @@ int count_lenw(char* word)
 	
 }
 
-void put_words(char** words, char* word, int max_min, int count)
+void put_words(char** words, char* word, int maxlen, int stop)
 {
 
-	for (int i = 0; i < count; ++i)	
+	for (int i = 0; i < stop; ++i)	
 	{
-		if (count_lenw(words[i]) != max_min)
+		if (count_lenw(words[i]) != maxlen)
 			printf("%s ", words[i]);
 		else 
 			printf("%s ", word);
 		free(words[i]);
-		words[i] = NULL;
 	}
 	putchar('\n');
 }
@@ -104,23 +81,18 @@ int main()
 	char word[N] = {'\0'};
 	int count = 0;
 	int numw = 0;
+	int maxlen = 0;
 	char** words = NULL;
-	int check = 0;
-	int max_min = N;
 
-	inputn(&check);
 	printf("Type string: ");	
-	numw = inputs(str);
+	numw = inputs(str, 0);
 	printf("Type word: ");
-	inputs(word);
-
-	if (check) 
-		max_min = 0;
+	inputs(word, 1);
 
 	words = (char**) malloc(numw * sizeof(char*));
-	count = create_words(str, words, &max_min, check);
+	count = create_words(str, words, &maxlen);
 	clear_words(words, numw, count);
-	put_words(words, word, max_min, count);
+	put_words(words, word, maxlen, count);
 		
 	free(words);
 
